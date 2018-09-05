@@ -1,13 +1,11 @@
 package com.atlassian.performance.tools.infrastructure.api.virtualusers
 
-import com.atlassian.performance.tools.jiraactions.api.scenario.Scenario
 import com.atlassian.performance.tools.virtualusers.api.VirtualUserLoad
 import com.atlassian.performance.tools.virtualusers.api.VirtualUserOptions
 import net.jcip.annotations.NotThreadSafe
 import org.hamcrest.CoreMatchers.*
 import org.junit.Assert.assertThat
 import org.junit.Test
-import java.net.URI
 import java.time.Duration.ofSeconds
 
 class MulticastVirtualUsersTest {
@@ -116,15 +114,6 @@ private class SingleUseVirtualUsers : VirtualUsers {
         } else {
             throw Exception("Don't apply load multiple times")
         }
-    }
-
-    override fun applyLoad(
-        jira: URI,
-        loadProfile: LoadProfile,
-        scenarioClass: Class<out Scenario>?,
-        diagnosticsLimit: Int?
-    ) {
-        throw Exception("unexpected call")
     }
 
     override fun gatherResults() {
