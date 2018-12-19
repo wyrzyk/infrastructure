@@ -1,7 +1,5 @@
 package com.atlassian.performance.tools.infrastructure.api.database
 
-import com.atlassian.performance.tools.infrastructure.DockerImage
-import com.atlassian.performance.tools.infrastructure.api.dataset.DatasetPackage
 import com.atlassian.performance.tools.infrastructure.api.os.Ubuntu
 import com.atlassian.performance.tools.ssh.api.SshConnection
 import org.apache.logging.log4j.LogManager
@@ -14,40 +12,24 @@ import java.time.Instant
  * @param maxConnections MySQL `max_connections` parameter.
  */
 class MySqlDatabase(
-    private val source: DatasetPackage,
-    private val maxConnections: Int
+    private val databaseDeployment: DatabaseDeployment
 ) : Database {
-    private val logger: Logger = LogManager.getLogger(this::class.java)
 
-    private val image: DockerImage = DockerImage(
-        name = "mysql:5.6.38",
-        pullTimeout = Duration.ofMinutes(5)
-    )
-    private val ubuntu = Ubuntu()
-
-    /**
-     * Uses MySQL defaults.
-     */
-    constructor(
-        source: DatasetPackage
-    ) : this(
-        source = source,
-        maxConnections = 151
-    )
-
-    override fun setup(ssh: SshConnection): String {
-        val mysqlData = source.download(ssh)
-        image.run(
-            ssh = ssh,
-            parameters = "-p 3306:3306 -v `realpath $mysqlData`:/var/lib/mysql",
-            arguments = "--skip-grant-tables --max_connections=$maxConnections"
-        )
-        return mysqlData
+    override fun getDeployment(): DatabaseDeployment {
+        return databaseDeployment
     }
 
-    override fun start(jira: URI, ssh: SshConnection) {
-        waitForMysql(ssh)
-        ssh.execute("""mysql -h 127.0.0.1  -u root -e "UPDATE jiradb.propertystring SET propertyvalue = '$jira' WHERE id IN (select id from jiradb.propertyentry where property_key like '%baseurl%');" """)
+    private val logger: Logger = LogManager.getLogger(this::class.java)
+
+    private val ubuntu = Ubuntu()
+
+    override fun start(jira: URI): String {
+        val location = databaseDeployment.setupIfRequired(Database.Type.MYSQL);
+        return databaseDeployment.executeSshCommand {
+            waitForMysql(it)
+            it.execute("""mysql -h 127.0.0.1  -u root -e "UPDATE jiradb.propertystring SET propertyvalue = '$jira' WHERE id IN (select id from jiradb.propertyentry where property_key like '%baseurl%');" """)
+            location
+        }
     }
 
     private fun waitForMysql(ssh: SshConnection) {
