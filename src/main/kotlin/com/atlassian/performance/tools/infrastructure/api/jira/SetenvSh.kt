@@ -35,7 +35,8 @@ class SetenvSh(
             debug = config.debug,
             jmx = config.remoteJmx,
             jiraIp = jiraIp
-        ) + gcLog.jvmArg()
+        )
+//        + gcLog.jvmArg()
         setArguments(connection, jvmArgs, original)
     }
 

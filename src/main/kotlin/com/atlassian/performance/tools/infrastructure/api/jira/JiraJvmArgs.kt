@@ -13,17 +13,19 @@ class JiraJvmArgs(
         debug: JvmDebug,
         jmx: RemoteJmx,
         jiraIp: String
-    ): List<JvmArg> = listOf(
-        JvmArg("-Datlassian.darkfeature.jira.onboarding.feature.disabled=", "true"),
-        JvmArg("-Djira.startup.warnings.disable=", "true"),
-        JvmArg("-XX:+PrintGCDetails"),
-        JvmArg("-XX:+PrintGCDateStamps"),
-        JvmArg("-XX:+PrintGCTimeStamps"),
-        JvmArg("-XX:+PrintGCCause"),
-        JvmArg("-XX:+PrintTenuringDistribution"),
-        JvmArg("-XX:+PrintGCApplicationStoppedTime"),
-        JvmArg("-XX:+UseGCLogFileRotation"),
-        JvmArg("-XX:NumberOfGCLogFiles=", "5"),
-        JvmArg("-XX:GCLogFileSize=", "20M")
-    ) + debug.getJvmOption() + jmx.getJvmArgs(jiraIp) + extra
+    ): List<JvmArg> =
+//        listOf(
+//        JvmArg("-Datlassian.darkfeature.jira.onboarding.feature.disabled=", "true"),
+//        JvmArg("-Djira.startup.warnings.disable=", "true"),
+//        JvmArg("-XX:+PrintGCDetails"),
+//        JvmArg("-XX:+PrintGCDateStamps"),
+//        JvmArg("-XX:+PrintGCTimeStamps"),
+//        JvmArg("-XX:+PrintGCCause"),
+//        JvmArg("-XX:+PrintTenuringDistribution"),
+//        JvmArg("-XX:+PrintGCApplicationStoppedTime"),
+//        JvmArg("-XX:+UseGCLogFileRotation"),
+//        JvmArg("-XX:NumberOfGCLogFiles=", "5"),
+//        JvmArg("-XX:GCLogFileSize=", "20M")
+//        ) +
+            debug.getJvmOption() + jmx.getJvmArgs(jiraIp) + extra
 }
