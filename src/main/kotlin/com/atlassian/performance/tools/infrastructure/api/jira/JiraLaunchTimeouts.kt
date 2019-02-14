@@ -43,7 +43,7 @@ class JiraLaunchTimeouts @Deprecated(message = "Use JiraLaunchTimeouts.Builder i
 
     class Builder() {
         private var offlineTimeout: Duration = Duration.ofMinutes(8)
-        private var initTimeout: Duration = Duration.ofMinutes(4)
+        private var initTimeout: Duration = Duration.ofMinutes(10)
         private var upgradeTimeout: Duration = Duration.ofMinutes(8)
         private var unresponsivenessTimeout: Duration = Duration.ofMinutes(4)
 
