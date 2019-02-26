@@ -29,11 +29,6 @@ internal class SshUbuntuContainer(
     private val publishing: List<Int> = emptyList(),
     private val forwarding: List<ForwardedPort> = emptyList()
 ) {
-    internal companion object {
-        internal const val SSH_PORT = 22
-        internal const val SSH_USERNAME = "root"
-        internal const val SSH_PASSWORD = "root"
-    }
 
     internal fun run(
         action: (ssh: SshConnection) -> Unit
