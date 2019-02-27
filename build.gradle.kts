@@ -55,6 +55,7 @@ dependencies {
     testCompile("org.hamcrest:hamcrest-library:1.3")
     testCompile("org.assertj:assertj-core:3.11.1")
     testCompile("com.atlassian.performance.tools:ssh-ubuntu:0.1.0")
+    testCompile("org.rnorth.duct-tape:duct-tape:1.0.7")
 }
 
 fun webdriver(): List<String> = listOf(
