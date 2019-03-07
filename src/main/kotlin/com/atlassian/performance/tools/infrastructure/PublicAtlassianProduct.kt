@@ -1,5 +1,6 @@
 package com.atlassian.performance.tools.infrastructure
 
+import com.atlassian.performance.tools.infrastructure.api.HttpResource
 import com.atlassian.performance.tools.ssh.api.SshConnection
 import java.net.URI
 import java.time.Duration
@@ -15,7 +16,7 @@ internal class PublicAtlassianProduct(
 
     private fun download(sshConnection: SshConnection) {
         val jiraArchiveUri = URI("https://product-downloads.atlassian.com/software/jira/downloads/$archiveName")
-        sshConnection.execute("wget -P $destination -q $jiraArchiveUri", Duration.ofMinutes(5))
+        HttpResource(jiraArchiveUri).download(sshConnection, "$destination/$archiveName", Duration.ofMinutes(5))
     }
 
     private fun unpack(sshConnection: SshConnection) {
