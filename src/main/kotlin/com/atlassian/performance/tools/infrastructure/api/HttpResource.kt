@@ -1,5 +1,6 @@
 package com.atlassian.performance.tools.infrastructure.api
 
+import com.atlassian.performance.tools.infrastructure.api.os.Ubuntu
 import com.atlassian.performance.tools.ssh.api.SshConnection
 import java.net.URI
 import java.time.Duration
@@ -33,6 +34,10 @@ class HttpResource(
         destination: String,
         timeout: Duration
     ) {
-        ssh.execute("""wget -q "${uri}" -O $destination""", timeout)
+        Ubuntu().install(ssh, listOf("lftp"))
+        ssh.execute(
+            """lftp -c 'pget -n 64 -c "$uri" -o $destination'""",
+            timeout
+        )
     }
 }
